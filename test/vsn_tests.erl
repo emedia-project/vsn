@@ -7,7 +7,11 @@ vsn_test_() ->
    fun setup/0, fun teardown/1,
    [
     ?_test(t_bump()),
-    ?_test(t_match())
+    ?_test(t_match()),
+    ?_test(t_max_version()),
+    ?_test(t_min_version()),
+    ?_test(t_max_expected()),
+    ?_test(t_min_expected())
    ]}.
 
 setup() ->
@@ -55,3 +59,25 @@ t_match() ->
   ?assert(vsn:match("1.2.3", "~1.2")),
   ?assert(vsn:match("1.2.3", "~1.2.3")).
 
+t_max_version() ->
+  ?assertMatch("1.2.3", vsn:max_version(["0", "1", "1.2", "1.2.3", "1.2.3-pre"])).
+
+t_min_version() ->
+  ?assertMatch("1.2.3-1", vsn:min_version(["2", "1.2.4", "1.2.3", "1.2.3-1"])).
+
+t_max_expected() ->
+  ?assertMatch("1.2.3", vsn:max_expected(["1.2.3", "1.2.3-pre", "1.2.2", "1.2.0"], ">1.2.2")),
+  ?assertMatch("1.2.2", vsn:max_expected(["1.2.3", "1.2.3-pre", "1.2.2", "1.2.0"], "=1.2.2")),
+  ?assertMatch("1.0.9", vsn:max_expected(["1.2.3", "1.0.0", "1.0.9", "0.9.0"], "~1.0.0")),
+  ?assertMatch(nil, vsn:max_expected(["1.2.3", "1.2.3-pre", "1.2.2", "1.2.0"], "=1.2.7")),
+  ?assertMatch(nil, vsn:max_expected(["1.2.3", "1.2.3-pre", "1.2.2", "1.2.0"], ">1.2.7")),
+  ?assertMatch(nil, vsn:max_expected(["1.2.3", "1.2.4", "3.9.1", "2.9.0"], "~1.1.0")).
+
+t_min_expected() ->
+  ?assertMatch("1.2.3-pre", vsn:min_expected(["1.2.3", "1.2.3-pre", "1.2.2", "1.2.0"], ">1.2.2")),
+  ?assertMatch("1.2.2", vsn:min_expected(["1.2.3", "1.2.3-pre", "1.2.2", "1.2.0"], "=1.2.2")),
+  ?assertMatch("1.0.0", vsn:min_expected(["1.2.3", "1.0.0", "1.0.9", "0.9.0"], "~1.0.0")),
+  ?assertMatch(nil, vsn:min_expected(["1.2.3", "1.2.3-pre", "1.2.2", "1.2.0"], "=1.2.7")),
+  ?assertMatch(nil, vsn:min_expected(["1.2.3", "1.2.3-pre", "1.2.2", "1.2.0"], ">1.2.7")),
+  ?assertMatch(nil, vsn:min_expected(["1.2.3", "1.2.4", "3.9.1", "2.9.0"], "~1.1.0")).
+  

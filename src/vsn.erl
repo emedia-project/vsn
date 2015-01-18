@@ -34,7 +34,13 @@
          match/2,
          bump/2,
          compare/2,
-         parse/1
+         parse/1,
+         max_version/1,
+         max_version/2,
+         max_expected/2,
+         min_version/1,
+         min_version/2,
+         min_expected/2
         ]).
 
 -type version() :: string().
@@ -132,7 +138,50 @@ parse(Version) ->
       {error, invalid_version}
   end.
 
+-spec max_version([version()]) -> version() | {error, any()}.
+max_version([V|Versions]) ->
+  lists:foldl(fun max_version/2, V, Versions).
+
+-spec max_version(version(), version()) -> version() | {error, any()}.
+max_version(Version1, Version2) ->
+  case compare(Version1, Version2) of
+    -1 -> Version2;
+    0 -> Version1;
+    1 -> Version1;
+    E -> E
+  end.
+
+-spec max_expected([version()], expect()) -> version() | nil.
+max_expected(Versions, Expected) ->
+  mm_expected(Versions, Expected, fun max_version/2).
+
+-spec min_version([version()]) -> version() | {error, any()}.
+min_version([V|Versions]) ->
+  lists:foldl(fun min_version/2, V, Versions).
+
+-spec min_version(version(), version()) -> version() | {error, any()}.
+min_version(Version1, Version2) ->
+  case compare(Version1, Version2) of
+    1 -> Version2;
+    0 -> Version1;
+    -1 -> Version1;
+    E -> E
+  end.
+
+-spec min_expected([version()], expect()) -> version() | nil.
+min_expected(Versions, Expected) ->
+  mm_expected(Versions, Expected, fun min_version/2).
+
 % private
+
+mm_expected(Versions, Expected, Fun) ->
+  lists:foldl(fun(V, M) ->
+                  case {M, match(V, Expected)} of
+                    {nil, true} -> V;
+                    {_, true} -> Fun(V, M);
+                    _ -> M
+                  end
+              end, nil, Versions).
 
 equal(Version, Expected) ->
   compare(Version, Expected) =:= 0.
@@ -140,7 +189,7 @@ equal(Version, Expected) ->
 tild(Version, Expected) ->
   case compare(Version, Expected) of
     0 -> true;
-    -1 -> true;
+    -1 -> false;
     1 -> 
       {ok, #{major := _,
              minor := _,

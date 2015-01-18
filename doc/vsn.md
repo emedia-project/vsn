@@ -148,7 +148,7 @@ version() = string()
 ## Function Index ##
 
 
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bump-2">bump/2</a></td><td></td></tr><tr><td valign="top"><a href="#compare-2">compare/2</a></td><td></td></tr><tr><td valign="top"><a href="#match-2">match/2</a></td><td></td></tr><tr><td valign="top"><a href="#parse-1">parse/1</a></td><td></td></tr></table>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bump-2">bump/2</a></td><td></td></tr><tr><td valign="top"><a href="#compare-2">compare/2</a></td><td></td></tr><tr><td valign="top"><a href="#match-2">match/2</a></td><td></td></tr><tr><td valign="top"><a href="#max_expected-2">max_expected/2</a></td><td></td></tr><tr><td valign="top"><a href="#max_version-1">max_version/1</a></td><td></td></tr><tr><td valign="top"><a href="#max_version-2">max_version/2</a></td><td></td></tr><tr><td valign="top"><a href="#min_expected-2">min_expected/2</a></td><td></td></tr><tr><td valign="top"><a href="#min_version-1">min_version/1</a></td><td></td></tr><tr><td valign="top"><a href="#min_version-2">min_version/2</a></td><td></td></tr><tr><td valign="top"><a href="#parse-1">parse/1</a></td><td></td></tr></table>
 
 
 <a name="functions"></a>
@@ -184,6 +184,72 @@ compare(Version::<a href="#type-version">version()</a>, Expected::<a href="#type
 
 <pre><code>
 match(Version::<a href="#type-version">version()</a>, Expected::<a href="#type-expect">expect()</a>) -&gt; true | false
+</code></pre>
+<br />
+
+
+<a name="max_expected-2"></a>
+
+### max_expected/2 ###
+
+
+<pre><code>
+max_expected(Versions::[<a href="#type-version">version()</a>], Expected::<a href="#type-expect">expect()</a>) -&gt; <a href="#type-version">version()</a> | nil
+</code></pre>
+<br />
+
+
+<a name="max_version-1"></a>
+
+### max_version/1 ###
+
+
+<pre><code>
+max_version(Versions::[<a href="#type-version">version()</a>]) -&gt; <a href="#type-version">version()</a> | {error, any()}
+</code></pre>
+<br />
+
+
+<a name="max_version-2"></a>
+
+### max_version/2 ###
+
+
+<pre><code>
+max_version(Version1::<a href="#type-version">version()</a>, Version2::<a href="#type-version">version()</a>) -&gt; <a href="#type-version">version()</a> | {error, any()}
+</code></pre>
+<br />
+
+
+<a name="min_expected-2"></a>
+
+### min_expected/2 ###
+
+
+<pre><code>
+min_expected(Versions::[<a href="#type-version">version()</a>], Expected::<a href="#type-expect">expect()</a>) -&gt; <a href="#type-version">version()</a> | nil
+</code></pre>
+<br />
+
+
+<a name="min_version-1"></a>
+
+### min_version/1 ###
+
+
+<pre><code>
+min_version(Versions::[<a href="#type-version">version()</a>]) -&gt; <a href="#type-version">version()</a> | {error, any()}
+</code></pre>
+<br />
+
+
+<a name="min_version-2"></a>
+
+### min_version/2 ###
+
+
+<pre><code>
+min_version(Version1::<a href="#type-version">version()</a>, Version2::<a href="#type-version">version()</a>) -&gt; <a href="#type-version">version()</a> | {error, any()}
 </code></pre>
 <br />
 

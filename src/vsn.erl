@@ -13,28 +13,20 @@
 %%
 %% Prerelease are sorted following this order :
 %% 
-%% <pre>
-%% alpha = a &lt; beta = b &lt; pre = any()
-%% </pre>
+%% <pre>alpha = a &lt; beta = b &lt; pre = any()</pre>
 %%
 %% The default prefix is pre :
 %%
-%% <pre>
-%% 1.0-1 = 1.0-pre1
-%% </pre>
+%% <pre>1.0-1 = 1.0-pre1</pre>
 %%
 %% Prereleases sort between real releases :
 %%
-%% <pre>
-%% 1.0 &gt; 1.0.pre &gt; 1.0.b &gt; 1.0.a
-%% </pre>
+%% <pre>1.0 &gt; 1.0.pre &gt; 1.0.b &gt; 1.0.a</pre>
 %%
 %% You can also give a build value by adding it at the end, separated
 %% plus (+) :
 %%
-%% <pre>
-%% 1.0.2-pre1+build1
-%% </pre>
+%% <pre>1.0.2-pre1+build1</pre>
 %% @end
 -module(vsn).
 

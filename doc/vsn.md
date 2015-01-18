@@ -33,8 +33,7 @@ Prerelease are sorted following this order :
 
 
 ```
-
-  alpha = a < beta = b < pre = any()
+alpha = a < beta = b < pre = any()
 ```
 
 
@@ -44,8 +43,7 @@ The default prefix is pre :
 
 
 ```
-
-  1.0-1 = 1.0-pre1
+1.0-1 = 1.0-pre1
 ```
 
 
@@ -55,8 +53,7 @@ Prereleases sort between real releases :
 
 
 ```
-
-  1.0 > 1.0.pre > 1.0.b > 1.0.a
+1.0 > 1.0.pre > 1.0.b > 1.0.a
 ```
 
 
@@ -67,8 +64,7 @@ plus (+) :
 
 
 ```
-
-  1.0.2-pre1+build1
+1.0.2-pre1+build1
 ```
 
 <a name="types"></a>

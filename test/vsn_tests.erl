@@ -17,12 +17,12 @@ teardown(_) ->
   ok.
 
 t_bump() ->
-  ?assertMatch("2.0.0", vsn:bump(major, "1.2.3")),
-  ?assertMatch("1.3.0", vsn:bump(minor, "1.2.3")),
-  ?assertMatch("1.2.4", vsn:bump(patch, "1.2.3")),
-  ?assertMatch("1.2.3", vsn:bump(patch, "1.2.3-pre")),
-  ?assertMatch("1.2.4", vsn:bump(patch, "1.2.3+build")),
-  ?assertMatch("1.2.3", vsn:bump(patch, "1.2.3-pre+build")).
+  ?assertMatch({ok, "2.0.0"}, vsn:bump(major, "1.2.3")),
+  ?assertMatch({ok, "1.3.0"}, vsn:bump(minor, "1.2.3")),
+  ?assertMatch({ok, "1.2.4"}, vsn:bump(patch, "1.2.3")),
+  ?assertMatch({ok, "1.2.3"}, vsn:bump(patch, "1.2.3-pre")),
+  ?assertMatch({ok, "1.2.4"}, vsn:bump(patch, "1.2.3+build")),
+  ?assertMatch({ok, "1.2.3"}, vsn:bump(patch, "1.2.3-pre+build")).
 
 t_match() ->
   ?assert(vsn:match("1.2.3", "=1.2.3")),

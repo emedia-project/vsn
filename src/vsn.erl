@@ -149,12 +149,12 @@ tild(Version, Expected) ->
              pre := _,
              build := _,
              d := D}} = parse(Expected),
-      MaxExpected = if
-                      D =:= 3 ->
-                        bump(minor, Expected);
-                      true ->
-                        bump(major, Expected)
-                    end,
+      {ok, MaxExpected} = if
+                            D =:= 3 ->
+                              bump(minor, Expected);
+                            true ->
+                              bump(major, Expected)
+                          end,
       case compare(Version, MaxExpected) of
         1 -> false;
         _ -> true

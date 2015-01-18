@@ -1,8 +1,8 @@
-%% @doc
-%% @author Gregoire Lejeune (gregoire.lejeune@free.fr)
+%% @author Gregoire Lejeune <gregoire.lejeune@free.fr>
 %%
+%% @doc
 %% The vsn module allow you to manipulate string versions.
-%% 
+%%
 %% A version string should normally be a series of numbers
 %% separated by periods.
 %%
@@ -12,21 +12,28 @@
 %%
 %% Prerelease are sorted following this order :
 %% 
-%%     alpha = a < beta = b < pre = any()
+%% <pre>
+%% alpha = a &lt; beta = b &lt; pre = any()
+%% </pre>
 %%
 %% The default prefix is pre :
 %%
-%%     1.0-1 = 1.0-pre1
-%% 
+%% <pre>
+%% 1.0-1 = 1.0-pre1
+%% </pre>
+%%
 %% Prereleases sort between real releases :
 %%
-%%     1.0 > 1.0.pre > 1.0.b > 1.0.a
-%% 
+%% <pre>
+%% 1.0 &gt; 1.0.pre &gt; 1.0.b &gt; 1.0.a
+%% </pre>
+%%
 %% You can also give a build value by adding it at the end, separated
 %% plus (+) :
 %%
-%%     1.0.2-pre1+build1
-%%
+%% <pre>
+%% 1.0.2-pre1+build1
+%% </pre>
 %% @end
 -module(vsn).
 

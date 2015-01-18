@@ -1,27 +1,74 @@
 
 
 # Module vsn #
+* [Description](#description)
 * [Data Types](#types)
 * [Function Index](#index)
 * [Function Details](#functions)
 
-__Authors:__ Gregoire Lejeune (gregoire.lejeune@free.fr)
-  The vsn module allow you to manipulate string versions.
-  A version string should normally be a series of numbers
-  separated by periods.
-  If any part contains letters then that version is considered prerelease.
-  Versions with a prerelease part in the Nth part sort less than versions
-  with N-1parts.
-  Prerelease are sorted following this order :
-      alpha = a ([`beta = b < pre = any()  The default prefix is pre :      1.0-1 = 1.0-pre1  Prereleases sort between real releases :      1.0`](mailto:beta = b < pre = any()
- 
-  The default prefix is pre :
- 
-      1.0-1 = 1.0-pre1
- 
-  Prereleases sort between real releases :
- 
-      1.0)).
+
+
+The vsn module allow you to manipulate string versions.
+__Authors:__ Gregoire Lejeune ([`gregoire.lejeune@free.fr`](mailto:gregoire.lejeune@free.fr)).
+<a name="description"></a>
+
+## Description ##
+
+
+
+A version string should normally be a series of numbers
+separated by periods.
+
+
+
+If any part contains letters then that version is considered prerelease.
+Versions with a prerelease part in the Nth part sort less than versions
+with N-1parts.
+
+
+
+Prerelease are sorted following this order :
+
+
+
+```
+
+  alpha = a < beta = b < pre = any()
+```
+
+
+
+The default prefix is pre :
+
+
+
+```
+
+  1.0-1 = 1.0-pre1
+```
+
+
+
+Prereleases sort between real releases :
+
+
+
+```
+
+  1.0 > 1.0.pre > 1.0.b > 1.0.a
+```
+
+
+
+You can also give a build value by adding it at the end, separated
+plus (+) :
+
+
+
+```
+
+  1.0.2-pre1+build1
+```
 
 <a name="types"></a>
 

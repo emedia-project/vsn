@@ -7,12 +7,13 @@
 * [Function Details](#functions)
 
 
-
-The vsn module allow you to manipulate string versions.
+.
 __Authors:__ Gregoire Lejeune ([`gregoire.lejeune@free.fr`](mailto:gregoire.lejeune@free.fr)).
 <a name="description"></a>
 
 ## Description ##
+
+The vsn module allow you to manipulate string versions.
 
 
 

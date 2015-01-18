@@ -1,6 +1,7 @@
 %% @author Gregoire Lejeune <gregoire.lejeune@free.fr>
 %%
 %% @doc
+%%
 %% The vsn module allow you to manipulate string versions.
 %%
 %% A version string should normally be a series of numbers

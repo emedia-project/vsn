@@ -2,10 +2,9 @@
   {description, ""},
   {vsn, "1.0.0"},
   {registered, []},
+  {modules, []},
   {applications, [
                   kernel,
                   stdlib
-                 ]},
-  {mod, {}},
-  {env, []}
+                 ]}
 ]}.

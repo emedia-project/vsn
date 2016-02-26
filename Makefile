@@ -1,39 +1,10 @@
-REBAR = ./rebar
+PROJECT = vsn
 
-.PHONY: compile get-deps test doc
+DEP_PLUGINS = mix.mk
+BUILD_DEPS = mix.mk
+ELIXIR_VERSION = ~> 1.2
+ELIXIR_BINDINGS = vsn
 
-all: compile doc
+dep_mix.mk = git https://github.com/botsunit/mix.mk.git master
 
-compile: get-deps
-	@$(REBAR) compile
-
-get-deps:
-	@$(REBAR) get-deps
-	@$(REBAR) check-deps
-
-clean:
-	@$(REBAR) clean
-	rm -f erl_crash.dump
-
-realclean: clean
-	@$(REBAR) delete-deps
-
-test: compile
-	@$(REBAR) skip_deps=true eunit
-
-doc:
-	@rm -f README.md
-	@rm -rf doc
-	@./make_doc
-
-dev:
-	@erl -pa ebin include deps/*/ebin deps/*/include
-
-analyze: checkplt
-	@$(REBAR) skip_deps=true dialyze
-
-buildplt:
-	@$(REBAR) skip_deps=true build-plt
-
-checkplt: buildplt
-	@$(REBAR) skip_deps=true check-plt
+include erlang.mk

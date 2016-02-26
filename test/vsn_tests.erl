@@ -11,7 +11,8 @@ vsn_test_() ->
     ?_test(t_max_version()),
     ?_test(t_min_version()),
     ?_test(t_max_expected()),
-    ?_test(t_min_expected())
+    ?_test(t_min_expected()),
+    ?_test(t_compare())
    ]}.
 
 setup() ->
@@ -30,13 +31,22 @@ t_bump() ->
 
 t_match() ->
   ?assert(vsn:match("1.2.3", "=1.2.3")),
+  ?assert(vsn:match("1.2.3", "==1.2.3")),
+  ?assert(vsn:match("1.2.3", "== 1.2.3")),
   ?assert(vsn:match("1.2.3", ">=1.2.3")),
+  ?assert(vsn:match("1.2.3", "=>1.2.3")),
+  ?assert(vsn:match("1.2.3", "=>  1.2.3")),
+  ?assert(vsn:match("1.2.3", " =>  1.2.3")),
+  ?assert(vsn:match(" 1.2.3 ", " =>  1.2.3  ")),
   ?assert(vsn:match("1.2.3", "=<1.2.3")),
+  ?assert(vsn:match("1.2.3", "<=1.2.3")),
+  ?assert(vsn:match("1.2.3", "<= 1.2.3")),
   ?assert(vsn:match("1.2.3", ">1.2.2")),
   ?assert(vsn:match("1.2.3", "<1.2.4")),
   ?assert(vsn:match("1.2.3", ">1.2.3-pre")),
   ?assert(vsn:match("1.2.3", "<1.2.4-pre")),
   ?assert(vsn:match("1.2.3-pre", "=1.2.3-pre")),
+  ?assert(vsn:match("1.2.3-pre", "==1.2.3-pre")),
   ?assert(vsn:match("1.2.3-pre1", ">1.2.3-pre")),
   ?assert(vsn:match("1.2.3-pre", "<1.2.3-pre1")),
   ?assert(vsn:match("1.2.3-alpha", "=1.2.3-alpha")),
@@ -81,3 +91,13 @@ t_min_expected() ->
   ?assertMatch(nil, vsn:min_expected(["1.2.3", "1.2.3-pre", "1.2.2", "1.2.0"], ">1.2.7")),
   ?assertMatch(nil, vsn:min_expected(["1.2.3", "1.2.4", "3.9.1", "2.9.0"], "~1.1.0")).
   
+t_compare() ->
+  % 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-alpha.beta < 1.0.0-beta < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0
+  ?assertMatch(-1, vsn:compare("1.0.0-alpha", "1.0.0-alpha.1")),
+  ?assertMatch(-1, vsn:compare("1.0.0-alpha.1", "1.0.0-alpha.beta")),
+  ?assertMatch(-1, vsn:compare("1.0.0-alpha.beta", "1.0.0-beta")),
+  ?assertMatch(-1, vsn:compare("1.0.0-beta", "1.0.0-beta.2")),
+  ?assertMatch(-1, vsn:compare("1.0.0-beta.2", "1.0.0-beta.11")),
+  ?assertMatch(-1, vsn:compare("1.0.0-beta.11", "1.0.0-rc.1")),
+  ?assertMatch(-1, vsn:compare("1.0.0-rc.1", "1.0.0")).
+

@@ -13,7 +13,7 @@
 %%
 %% Prerelease are sorted following this order :
 %% 
-%% <pre>alpha = a &lt; beta = b &lt; pre = any()</pre>
+%% <pre>alpha = a &lt; beta = b &lt; pre &lt; rc = any()</pre>
 %%
 %% The default prefix is pre :
 %%
@@ -46,23 +46,33 @@
 -type version() :: string().
 -type expect() :: string().
 -type type() :: major | minor | match.
--type prefix() :: alpha | a | beta | b | pre.
+-type prefix() :: alpha | a | beta | b | pre | rc.
 -type pre() ::  nil | {prefix(), string()}.
 -type parsed_version() :: #{major => integer(), minor => integer(), patch => integer(), v => version(), pre => pre(), build => string(), d => integer()}.
 
 -spec match(version(), expect()) -> true | false.
 match(Version, [$>, $=|Expected]) ->
   sup(Version, Expected) orelse equal(Version, Expected);
+match(Version, [$=, $>|Expected]) ->
+  sup(Version, Expected) orelse equal(Version, Expected);
 match(Version, [$=, $<|Expected]) ->
   inf(Version, Expected) orelse equal(Version, Expected);
+match(Version, [$<, $=|Expected]) ->
+  inf(Version, Expected) orelse equal(Version, Expected);
+match(Version, [$=, $=|Expected]) ->
+  equal(Version, Expected);
 match(Version, [$=|Expected]) ->
   equal(Version, Expected);
 match(Version, [$>|Expected]) ->
   sup(Version, Expected);
 match(Version, [$<|Expected]) ->
   inf(Version, Expected);
+match(Version, [$~, $>|Expected]) ->
+  tild(Version, Expected);
 match(Version, [$~|Expected]) ->
   tild(Version, Expected);
+match(Version, [32|Expected]) ->
+  match(Version, Expected);
 match(Version, Expected) ->
   equal(Version, Expected).
 
@@ -124,8 +134,9 @@ compare(Version, Expected) ->
 
 -spec parse(version()) -> {ok, parsed_version()} | {error, any()}.
 parse(Version) ->
+  Version1 = str(Version),
   Re = "^v?(?<version>(?<major>\\d+)\.?(?<minor>\\d+)?\.?(?<patchlevel>\\d+)?)(?<pre>-[0-9A-Za-z-\.]+)?(?<build>\\+[0-9A-Za-z-\.]+)?\$",
-  case re:run(Version, Re, [{capture, [major, minor, patchlevel, version, pre, build], list}]) of
+  case re:run(Version1, Re, [{capture, [major, minor, patchlevel, version, pre, build], list}]) of
     {match, [X0, Y0, Z0, V, Pre, Build]} ->
       {ok, #{major => to_integer(X0),
              minor => to_integer(Y0),
@@ -174,6 +185,9 @@ min_expected(Versions, Expected) ->
 
 % private
 
+str(Version) ->
+  string:strip(Version, both, 32).
+
 mm_expected(Versions, Expected, Fun) ->
   lists:foldl(fun(V, M) ->
                   case {M, match(V, Expected)} of
@@ -220,10 +234,25 @@ compare_v(nil, nil) -> 0;
 compare_v(nil, _) -> -1;
 compare_v(_, nil) -> 1;
 compare_v(V, E) ->
+  {V1, E1} = try_to_integer(V, E),
   if 
-    V > E -> 1;
-    V < E -> -1;
+    V1 > E1 -> 1;
+    V1 < E1 -> -1;
     true -> 0
+  end.
+
+try_to_integer(V, E) ->
+  V1 = try list_to_integer(V) 
+       catch
+         _:_ -> V
+       end,
+  E1 = try list_to_integer(E)
+       catch
+         _:_ -> E
+       end,
+  if
+    is_integer(V1) andalso is_integer(E1) -> {V1, E1};
+    true -> {V, E}
   end.
 
 compare_p(nil, nil) -> 0;

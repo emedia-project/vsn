@@ -219,8 +219,8 @@ tild(Version, Expected) ->
                               bump(major, Expected)
                           end,
       case compare(Version, MaxExpected) of
-        1 -> false;
-        _ -> true
+        -1 -> true;
+        _ -> false
       end
   end.
 

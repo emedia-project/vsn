@@ -8,3 +8,7 @@ ELIXIR_BINDINGS = vsn
 dep_mix.mk = git https://github.com/botsunit/mix.mk.git master
 
 include erlang.mk
+
+dev: deps app
+	@erl -pa ebin include deps/*/ebin deps/*/include
+

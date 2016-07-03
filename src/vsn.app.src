@@ -1,10 +1,24 @@
-{application, vsn, [
-  {description, ""},
-  {vsn, "1.0.0"},
-  {registered, []},
-  {modules, []},
-  {applications, [
-                  kernel,
-                  stdlib
-                 ]}
-]}.
+{application, vsn, 
+ [
+    {description, "Erlang and Elixir module to manipulate string versions"}
+  , {vsn, "1.0.0"}
+  , {registered, []}
+  , {modules, []}
+  , {applications, 
+     [
+        kernel
+      , stdlib
+     ]}
+
+  , {maintainers, ["Gregoire Lejeune"]}
+  , {licenses, ["BSD-3"]}
+  , {links, [{"Github", "https://github.com/emedia-project/vsn"}]}
+  , {files, ["src/*"
+             , "lib/*"
+             , "Makefile"
+             , "README.md"
+             , "rebar.config"
+             , "rebar.lock"
+             , "mix.exs"]}
+  , {build_tools, ["rebar3", "mix", "make"]}
+ ]}.

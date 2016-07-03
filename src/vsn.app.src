@@ -1,6 +1,6 @@
 {application, vsn, 
  [
-    {description, "Erlang and Elixir module to manipulate string versions"}
+    {description, "Module for parsing and matching versions"}
   , {vsn, "1.0.0"}
   , {registered, []}
   , {modules, []}

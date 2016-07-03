@@ -45,40 +45,51 @@
          next/3
         ]).
 
--type version() :: string().
--type expect() :: string().
+-type version() :: string() | binary().
+-type expect() :: string() | binary().
 -type type() :: major | minor | match.
 -type prefix() :: alpha | a | beta | b | pre | rc.
 -type pre() ::  nil | {prefix(), string()}.
 -type parsed_version() :: #{major => integer(), minor => integer(), patch => integer(), v => version(), pre => pre(), build => string(), d => integer()}.
 
 -spec match(version(), expect()) -> true | false.
-match(Version, [$>, $=|Expected]) ->
+match(Version, Expected) when is_binary(Version) ->
+  match(binary_to_list(Version), Expected);
+match(Version, Expected) when is_binary(Expected) ->
+  match(Version, binary_to_list(Expected));
+match(Version, [$>, $=|Expected]) when is_list(Version) ->
   sup(Version, Expected) orelse equal(Version, Expected);
-match(Version, [$=, $>|Expected]) ->
+match(Version, [$=, $>|Expected]) when is_list(Version) ->
   sup(Version, Expected) orelse equal(Version, Expected);
-match(Version, [$=, $<|Expected]) ->
+match(Version, [$=, $<|Expected]) when is_list(Version) ->
   inf(Version, Expected) orelse equal(Version, Expected);
-match(Version, [$<, $=|Expected]) ->
+match(Version, [$<, $=|Expected]) when is_list(Version) ->
   inf(Version, Expected) orelse equal(Version, Expected);
-match(Version, [$=, $=|Expected]) ->
+match(Version, [$=, $=|Expected]) when is_list(Version) ->
   equal(Version, Expected);
-match(Version, [$=|Expected]) ->
+match(Version, [$=|Expected]) when is_list(Version) ->
   equal(Version, Expected);
-match(Version, [$>|Expected]) ->
+match(Version, [$>|Expected]) when is_list(Version) ->
   sup(Version, Expected);
-match(Version, [$<|Expected]) ->
+match(Version, [$<|Expected]) when is_list(Version) ->
   inf(Version, Expected);
-match(Version, [$~, $>|Expected]) ->
+match(Version, [$~, $>|Expected]) when is_list(Version) ->
   tild(Version, Expected);
-match(Version, [$~|Expected]) ->
+match(Version, [$~|Expected]) when is_list(Version) ->
   tild(Version, Expected);
-match(Version, [32|Expected]) ->
+match(Version, [$\s|Expected]) when is_list(Version) ->
   match(Version, Expected);
-match(Version, Expected) ->
+match(Version, [$\t|Expected]) when is_list(Version) ->
+  match(Version, Expected);
+match(Version, Expected) when is_list(Version), is_list(Expected) ->
   equal(Version, Expected).
 
 -spec bump(type(), version()) -> {ok, version()} | {error, any()}.
+bump(Type, Version) when is_binary(Version) ->
+  case bump(Type, binary_to_list(Version)) of
+    {ok, R} -> {ok, list_to_binary(R)};
+    Other -> Other
+  end;
 bump(Type, Version) ->
   case parse(Version) of
     {ok, #{major := Major,
@@ -135,7 +146,9 @@ compare(Version, Expected) ->
   end.
 
 -spec parse(version()) -> {ok, parsed_version()} | {error, any()}.
-parse(Version) ->
+parse(Version) when is_binary(Version) ->
+  parse(binary_to_list(Version));
+parse(Version) when is_list(Version) ->
   Version1 = str(Version),
   Re = "^v?(?<version>(?<major>\\d+)\.?(?<minor>\\d+)?\.?(?<patchlevel>\\d+)?)(?<pre>-[0-9A-Za-z-\.]+)?(?<build>\\+[0-9A-Za-z-\.]+)?\$",
   case re:run(Version1, Re, [{capture, [major, minor, patchlevel, version, pre, build], list}]) of

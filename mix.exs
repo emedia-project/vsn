@@ -4,7 +4,7 @@ defmodule Vsn.Mixfile do
   def project do
     [
       app: :vsn,
-      version: "1.0.1",
+      version: "1.1.0",
       elixir: "~> 1.2",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,

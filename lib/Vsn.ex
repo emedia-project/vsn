@@ -33,4 +33,10 @@ defmodule Vsn do
   def unquote(:"min_expected")(arg1, arg2) do
     :erlang.apply(:"vsn", :"min_expected", [arg1, arg2])
   end
+  def unquote(:"next")(arg1, arg2) do
+    :erlang.apply(:"vsn", :"next", [arg1, arg2])
+  end
+  def unquote(:"next")(arg1, arg2, arg3) do
+    :erlang.apply(:"vsn", :"next", [arg1, arg2, arg3])
+  end
 end

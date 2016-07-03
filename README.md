@@ -100,6 +100,12 @@ parsed_version() :: #{major => integer(),
 -spec min_expected([version()], expect()) -> version() | nil.
 ```
 
+### next/3
+
+```
+-spec next(version(), [version()], stable | unstable) -> version() | nil.
+```
+
 ## Licence
 
 Copyright (c) 2015, Gregoire Lejeune<br />

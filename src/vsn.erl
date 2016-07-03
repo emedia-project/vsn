@@ -40,7 +40,9 @@
          max_expected/2,
          min_version/1,
          min_version/2,
-         min_expected/2
+         min_expected/2,
+         next/2,
+         next/3
         ]).
 
 -type version() :: string().
@@ -183,7 +185,34 @@ min_version(Version1, Version2) ->
 min_expected(Versions, Expected) ->
   mm_expected(Versions, Expected, fun min_version/2).
 
+% @equiv next(Versions, Version, stable)
+next(Versions, Version) ->
+  next(Versions, Version, stable).
+
+-spec next(version(), [version()], stable | unstable) -> version() | nil.
+next(Version, Versions, Type) ->
+  Possibles = lists:foldl(fun(V, Acc) ->
+                              case sup(V, Version) andalso (
+                                                     (Type == stable andalso stable(V)) orelse
+                                                     Type == unstable) of
+                                true ->
+                                  [V|Acc];
+                                false ->
+                                  Acc
+                              end
+                          end, [], Versions),
+  case Possibles of
+    [] -> nil;
+    _ -> min_version(Possibles)
+  end.
+
 % private
+
+stable(Version) ->
+  case parse(Version) of
+    {ok, #{pre := nil}} -> true;
+    _ -> false
+  end.
 
 str(Version) ->
   string:strip(Version, both, 32).

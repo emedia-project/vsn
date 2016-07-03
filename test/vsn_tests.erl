@@ -12,7 +12,8 @@ vsn_test_() ->
     ?_test(t_min_version()),
     ?_test(t_max_expected()),
     ?_test(t_min_expected()),
-    ?_test(t_compare())
+    ?_test(t_compare()),
+    ?_test(t_next())
    ]}.
 
 setup() ->
@@ -100,4 +101,11 @@ t_compare() ->
   ?assertMatch(-1, vsn:compare("1.0.0-beta.2", "1.0.0-beta.11")),
   ?assertMatch(-1, vsn:compare("1.0.0-beta.11", "1.0.0-rc.1")),
   ?assertMatch(-1, vsn:compare("1.0.0-rc.1", "1.0.0")).
+
+t_next() ->
+  ?assertEqual("1.0.0", vsn:next("0.0.9", ["0.0.7", "0.0.8", "0.0.9", "1.0.0", "1.0.1", "1.1.0"])),
+  ?assertEqual("1.0.0-alpha1", vsn:next("0.0.9", ["0.0.7", "0.0.8", "0.0.9", "1.0.0-pre", "1.0.0-alpha1", "1.0.0-alpha2", "1.0.0-beta1",  "1.0.0-rc0", "1.0.0", "1.0.1", "1.1.0"], unstable)),
+  ?assertEqual("1.0.0", vsn:next("0.0.9", ["0.0.7", "0.0.8", "0.0.9", "1.0.0-pre", "1.0.0-alpha1", "1.0.0-alpha2", "1.0.0-beta1",  "1.0.0-rc0", "1.0.0", "1.0.1", "1.1.0"], stable)),
+  ?assertEqual("1.0.0", vsn:next("0.0.9", ["0.0.7", "0.0.8", "0.0.9", "1.2.0-pre", "1.2.0-alpha1", "1.2.0-alpha2", "1.2.0-beta1",  "1.2.0-rc0", "1.0.0", "1.0.1", "1.1.0"], unstable)),
+  ?assertEqual(nil, vsn:next("0.0.9", ["0.0.7", "0.0.8", "0.0.9", "0.0.9-rc1"])).
 

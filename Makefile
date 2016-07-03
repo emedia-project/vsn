@@ -40,3 +40,6 @@ distclean-ex: distclean
 distclean:
 	@rm -rf _build test/eunit deps ebin
 
+dev: compile-erl
+	@erl -pa _build/default/lib/*/ebin _build/default/lib/*/include
+

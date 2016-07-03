@@ -1,6 +1,6 @@
-# File: lib/Vsn.ex
-# This file was generated from src/vsn.erl
-# Using mix.mk (https://github.com/botsunit/mix.mk)
+# File: Vsn.ex
+# This file was generated from vsn.beam
+# Using rebar3_elixir (https://github.com/botsunit/rebar3_elixir)
 # MODIFY IT AT YOUR OWN RISK AND ONLY IF YOU KNOW WHAT YOU ARE DOING!
 defmodule Vsn do
   def unquote(:"match")(arg1, arg2) do

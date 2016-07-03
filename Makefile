@@ -1,14 +1,42 @@
-PROJECT = vsn
+.PHONY: doc
+FIND_REBAR = \
+                REBAR_BIN=; \
+                for x in ./rebar3 rebar3; do \
+                if type "$${x%% *}" >/dev/null 2>/dev/null; then REBAR_BIN=$$x; break; fi; \
+                done; \
+                if [ -z "$$REBAR_BIN" ]; then echo 1>&2 "Unable to find rebar3"; exit 2; fi
+REBAR = $(FIND_REBAR); $$REBAR_BIN
+MIX = mix
 
-DEP_PLUGINS = mix.mk
-BUILD_DEPS = mix.mk
-ELIXIR_VERSION = ~> 1.2
-ELIXIR_BINDINGS = vsn
+compile-erl:
+	@$(REBAR) compile
 
-dep_mix.mk = git https://github.com/botsunit/mix.mk.git master
+compile-ex: elixir
+	@$(MIX) deps.get
+	@$(MIX) compile
 
-include erlang.mk
+elixir:
+	@$(REBAR) elixir generate_mix
+	@$(REBAR) elixir generate_lib
 
-dev: deps app
-	@erl -pa ebin include deps/*/ebin deps/*/include
+tests:
+	@$(REBAR) eunit
+
+dist: dist-ex dist-erl
+
+release: dist-ex dist-erl
+	@$(REBAR) hex publish
+
+dist-erl: distclean-erl compile-erl tests
+
+distclean-erl: distclean
+	@rm -f rebar.lock
+
+dist-ex: distclean-ex compile-ex
+
+distclean-ex: distclean
+	@rm -f mix.lock
+
+distclean:
+	@rm -rf _build test/eunit deps ebin
 

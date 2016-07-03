@@ -6,11 +6,11 @@ log
 *.mnesia
 *.txt*
 *.swp*
-*.ets
 erl_crash.dump
 .eunit
-.rebar
 ext
-/.erlang.mk
+.rebar
+.erlang.mk
 *.d
-mix.lock
+test/eunit/
+_build/
